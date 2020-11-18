@@ -15,28 +15,31 @@ minute_value= hour_value = second_value = 0
 font = ('Courier',40,'bold')
 timer = None
 started_timer = False
+
 def start_timer():
     global started_timer
-    started_timer = True
-    if timer_label['text'] != 'TIMER':
-        timer_label['text'] = 'TIMER'
-    time = hour_value * 3600 + minute_value * 60 + second_value
-    print(time)
-    countdown(time)
+
+    if not started_timer:
+        started_timer = True
+        if timer_label['text'] != 'TIMER':
+            timer_label['text'] = 'TIMER'
+        time = hour_value * 3600 + minute_value * 60 + second_value
+        countdown(time)
 
 def reset_timer():
-    global started_timer
+    global started_timer,minute_value,hour_value,second_value
+    window.after_cancel(timer)
     started_timer = False
     timer_label['text'] = 'TIMER'
-    time_label['text'] = f"00:00:00"
+    time_label['text'] = "00:00:00"
+    hour_value = minute_value = second_value = 0
     second_scale.set(0)
     minute_scale.set(0)
     hour_scale.set(0)
-    window.after_cancel(timer)
 
 
 def countdown(time):
-    global minute_value,hour_value,timer,started_timer
+    global minute_value,hour_value,second_value,timer,started_timer
     temp_time = time
     hour_value = time // 3600
     temp_time -= 3600 * hour_value
